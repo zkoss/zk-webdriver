@@ -1,0 +1,8 @@
+.gradle
+build
+out
+*.local
+*.class
+Thumbs.db
+.idea
+*.iml

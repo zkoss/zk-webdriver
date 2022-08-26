@@ -1,0 +1,199 @@
+plugins {
+    id 'java'
+	id 'java-library'
+	id "idea"
+	id 'com.github.gmazzo.buildconfig' version '3.1.0'
+	id 'maven-publish'
+}
+
+group 'org.zkoss.test'
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+buildConfig {
+	className = "ChromeVersion"
+	packageName = 'org.zkoss.test.webdriver'
+	buildConfigField('String', 'CHROME_DRIVER_VERSION', provider { "\"${chromeVersion}\"" })
+	buildConfigField('int', 'CHROMIUM_BINARY_REVISION', provider { "${chromeBinaryRevision}" })
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs << '-parameters'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+java {
+	// Declaring feature variants for optionalImplementation, to generate dependency optional in pom
+	registerFeature('optional') {
+		usingSourceSet(sourceSets.main)
+	}
+}
+javadoc {
+	configure {
+		options.author true
+		options.use true
+		options.version true
+		options.showFromProtected()
+		options.addStringOption("charset", "UTF-8")
+		options.addBooleanOption("notimestamp", false)
+		options.addBooleanOption("-allow-script-in-comments", true)
+		options.addBooleanOption('Xdoclint:none', true)
+		options.addBooleanOption("breakiterator", true)
+		options.addStringOption("-source ${version}")
+		options.docFilesSubDirs = true
+	}
+}
+// build javadoc jar each subproject for bundle
+task javadocJar(type: Jar) {
+	dependsOn 'javadoc'
+	archiveClassifier = 'javadoc'
+	from "$javadoc.destinationDir"
+}
+
+// build sources jar for bundle
+task sourcesJar(type: Jar) {
+	dependsOn(generateBuildConfig)
+	archiveClassifier = 'sources'
+
+	// add generated java in to source
+	from "$buildDir/generated/source/buildConfig/main/main/"
+
+	includeEmptyDirs false
+	from 'src/main/java/'
+	from('src/main/resources') {
+		exclude '**/metainfo'
+	}
+	setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+}
+
+dependencies {
+	api "org.hamcrest:hamcrest:$hamcrestVersion"
+	api "io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion"
+	api "com.palantir.docker.compose:docker-compose-junit-jupiter:$dockerJunitVersion"
+	api "org.seleniumhq.selenium:selenium-java:$seleniumVersion"
+	api "org.apache.commons:commons-compress:$commonsCompressVersion"
+	api "org.apache.commons:commons-lang3:$commonsLang3Version"
+	api "org.eclipse.jetty:jetty-server:$jettyVersion"
+	api "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+
+	optionalImplementation "org.zkoss.common:zcommon:${zkVersion}"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+allprojects {
+	afterEvaluate {
+		// generate Publishing tasks each project, you can check these tasks with 'gradle task' command
+		publishing {
+			publications {
+				"$project.name"(MavenPublication) {
+					groupId = "${group}"
+					artifactId = project.name
+					// pom configuration
+					pom {
+						name = project.description
+						url = "https://www.zkoss.org/$project.name"
+						description = project.description
+						licenses {
+							license {
+								name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
+								url = 'https://www.gnu.org/licenses/lgpl.html'
+								distribution = 'repo'
+							}
+						}
+						developers {
+							developer {
+								id = 'zkteam'
+								name = 'ZK Team'
+								email = 'info@zkoss.org'
+								url = 'https://www.zkoss.org'
+								organization = 'Potix'
+								organizationUrl = 'https://www.zkoss.org'
+								roles = ['architect', 'developer']
+								timezone = '8'
+								properties = [
+										picUrl: 'https://www.zkoss.org'
+								]
+							}
+						}
+						scm {
+							connection = 'scm:git:https://github.com/zkoss/zk-webdriver.git'
+							url = 'https://mavensync.zkoss.org/maven2'
+						}
+						withXml {
+							// add repositories in generated pom
+							def repositoriesNode = asNode().appendNode('repositories')
+							project.repositories.each {repository ->
+								if (repository instanceof MavenArtifactRepository && repository.name != 'MavenRepo') {
+									def repositoryNode = repositoriesNode.appendNode('repository')
+									repositoryNode.appendNode('id', repository.name)
+									repositoryNode.appendNode('url', repository.url)
+								}
+							}
+							// add provided dependency in generated pom
+							project.configurations.compileOnly.allDependencies.each { dependency ->
+								asNode().dependencies[0].appendNode("dependency").with {
+									it.appendNode("groupId", dependency.group)
+									it.appendNode("artifactId", dependency.name)
+									it.appendNode("version", dependency.version)
+									it.appendNode("scope", "provided")
+								}
+							}
+						}
+					}
+					// add dependencies to pom
+					afterEvaluate {
+						from(components.java)
+					}
+					suppressAllPomMetadataWarnings()
+				}
+			}
+		}
+
+		// move & rename default-pom.xml
+		task preparePomFile(type: Copy) {
+			dependsOn(rootProject.tasks.withType(GenerateMavenPom))
+			into file("$projectDir/build/pom")
+			from file("$rootDir/build/publications/$project.name")
+			include '**/pom-default.xml'
+			rename 'pom-default.xml', 'pom.xml'
+			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+		}
+
+		// combine jar, source.jar, javadoc.jar & pom.xml into one bundle.jar
+		task bundleJar(type: Jar) {
+			dependsOn 'jar'
+			dependsOn 'sourcesJar'
+			dependsOn 'javadocJar'
+			dependsOn 'preparePomFile'
+			dependsOn(project.getTasksByName('bundleAPIJar', false))
+			dependsOn(project.getTasksByName('bundleIMPLJar', false))
+			archiveClassifier = "bundle"
+			def elementName = "${project.name}-${project.version}"
+			from("$buildDir/libs") {
+				include "**/${elementName}.jar"
+				include "**/${elementName}-sources.jar"
+				include "**/${elementName}-javadoc.jar"
+				setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+			}
+		}
+	}
+}
+
+description = 'ZK Webdriver'
