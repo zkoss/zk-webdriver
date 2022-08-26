@@ -33,13 +33,6 @@ test {
 
 
 ### How to upgrade chrome version
-1. visit https://omahaproxy.appspot.com/
-```
-    Info: os=mac, channel=stable, 
-    "chromeVersion" => current_version
-    "chromeBinaryRevision" => branch_base_position
-```
-or search the text "Chromium" from https://github.com/puppeteer/puppeteer/releases
-
+1. Search the text "Chromium" from https://github.com/puppeteer/puppeteer/releases
 2. Update the `version` and `chromeVersion` to Chromium version in `gradle.properties`
 3. Update the `chromeBinaryRevision` to the revision `r10.....` in `gradle.properties`
