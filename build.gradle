@@ -192,6 +192,10 @@ allprojects {
 				include "**/${elementName}-javadoc.jar"
 				setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
 			}
+			from("$buildDir/pom") {
+				include "pom.xml"
+				setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+			}
 		}
 	}
 }
