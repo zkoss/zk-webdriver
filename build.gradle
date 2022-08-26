@@ -2,7 +2,6 @@ plugins {
     id 'java'
 	id 'java-library'
 	id "idea"
-	id 'com.github.gmazzo.buildconfig' version '3.1.0'
 	id 'maven-publish'
 }
 
@@ -14,14 +13,6 @@ idea {
 		testOutputDir file("$buildDir/classes/test")
 	}
 }
-
-buildConfig {
-	className = "ChromeVersion"
-	packageName = 'org.zkoss.test.webdriver'
-	buildConfigField('String', 'CHROME_DRIVER_VERSION', provider { "\"${chromeVersion}\"" })
-	buildConfigField('int', 'CHROMIUM_BINARY_REVISION', provider { "${chromeBinaryRevision}" })
-}
-
 
 repositories {
     mavenCentral()
@@ -64,7 +55,6 @@ task javadocJar(type: Jar) {
 
 // build sources jar for bundle
 task sourcesJar(type: Jar) {
-	dependsOn(generateBuildConfig)
 	archiveClassifier = 'sources'
 
 	// add generated java in to source
