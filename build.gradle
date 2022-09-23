@@ -77,6 +77,7 @@ dependencies {
 	api "org.apache.commons:commons-lang3:$commonsLang3Version"
 	api "org.eclipse.jetty:jetty-server:$jettyVersion"
 	api "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+	api "com.google.guava:guava:31.0.1-jre" // override com.palantir.docker.compose using old version fails on maven project
 
 	optionalImplementation "org.zkoss.common:zcommon:${zkVersion}"
 	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"

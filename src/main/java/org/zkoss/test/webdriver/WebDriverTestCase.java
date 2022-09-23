@@ -315,7 +315,7 @@ public abstract class WebDriverTestCase {
 
 		final WebAppContext context = new WebAppContext();
 		context.setContextPath(getContextPath());
-		context.setBaseResource(Resource.newResource("./src/main/webapp/"));
+		context.setBaseResource(Resource.newResource(System.getProperty("zkWebdriverBaseResource", "./src/main/webapp/")));
 		context.getSessionHandler().setSessionIdPathParameterName(null);
 		server.setHandler(new HandlerList(context, new DefaultHandler()));
 		initServer(server);

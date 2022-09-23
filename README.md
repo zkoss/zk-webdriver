@@ -18,6 +18,15 @@ test {
 }
 ```
 
+### How to specify Webapp Base Resource in System Property
+For example in Gradle,
+```gradle
+test {
+    systemProperty "zkWebdriverBaseResource", "./test/webapp/"
+}
+```
+Note: the default value is `"./src/main/webapp/"`
+
 ### How to specify a fix Jetty Port in System Property
 For example in Gradle,
 ```gradle
