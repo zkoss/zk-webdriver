@@ -1,6 +1,9 @@
 The ZK Webdriver utility library.
 -----
 
+### Support Version
+* JDK 11+
+* Servlet 3 (with Jetty v10+)
 
 ### How to specify ContextPath in System Property
 For example in Gradle,
