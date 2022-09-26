@@ -18,7 +18,7 @@ package org.zkoss.test.webdriver.ztl;
 
 import org.openqa.selenium.By;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.BaseTestCase;
 
 /**
  * A simulator of ZK client side object, which wraps the ZK client API.
@@ -29,7 +29,7 @@ public class ZK extends ClientWidget {
 	 * The script of get jq by UUID
 	 */
 	private static String ZK = "zk('%1')";
-	public final static String VERSION = WebDriverTestCase.getEval("zk.version");
+	public final static String VERSION = BaseTestCase.getEval("zk.version");
 
 	public ZK(String selector) {
 		if (isEmpty(selector))
@@ -53,8 +53,8 @@ public class ZK extends ClientWidget {
 	 * Returns the revised offset array.
 	 */
 	public int[] revisedOffset() {
-		String[] s = WebDriverTestCase.getEval(_out.toString() + ".revisedOffset()").split(",");
-		return new int[] { WebDriverTestCase.parseInt(s[0]), WebDriverTestCase.parseInt(s[1]) };
+		String[] s = BaseTestCase.getEval(_out.toString() + ".revisedOffset()").split(",");
+		return new int[] { BaseTestCase.parseInt(s[0]), BaseTestCase.parseInt(s[1]) };
 	}
 
 	/**
@@ -62,7 +62,8 @@ public class ZK extends ClientWidget {
 	 * @param size the original size.
 	 */
 	public int revisedWidth(int size) {
-		return Integer.parseInt(WebDriverTestCase.getEval(_out.toString() + ".revisedWidth(" + size + ")"));
+		return Integer.parseInt(
+				BaseTestCase.getEval(_out.toString() + ".revisedWidth(" + size + ")"));
 	}
 
 	/**
@@ -70,14 +71,15 @@ public class ZK extends ClientWidget {
 	 * @param size the original size.
 	 */
 	public int revisedHeight(int size) {
-		return Integer.parseInt(WebDriverTestCase.getEval(_out.toString() + ".revisedHeight(" + size + ")"));
+		return Integer.parseInt(
+				BaseTestCase.getEval(_out.toString() + ".revisedHeight(" + size + ")"));
 	}
 
 	/**
 	 * focus the current element
 	 */
 	public void focus() {
-		WebDriverTestCase.getEval(_out.toString() + ".focus()");
+		BaseTestCase.getEval(_out.toString() + ".focus()");
 	}
 
 	/**
@@ -103,7 +105,7 @@ public class ZK extends ClientWidget {
 	 * The invoking JavaScript code will be "zk.ie", and return the boolean value. 
 	 */
 	public static boolean is(String name) {
-		return Boolean.valueOf(WebDriverTestCase.getEval("!!(zk." + name + ")"));
+		return Boolean.valueOf(BaseTestCase.getEval("!!(zk." + name + ")"));
 	}
 
 	public Element toElement() {

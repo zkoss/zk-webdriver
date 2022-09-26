@@ -42,9 +42,9 @@ public class ExternalZkXml implements BeforeAllCallback, AfterAllCallback { // e
 	 *
 	 * @param testClass a test class (WebDriverTestCase only)
 	 */
-	public ExternalZkXml(Class<? extends WebDriverTestCase> testClass) {
+	public ExternalZkXml(Class<? extends BaseTestCase> testClass) {
 		String className = testClass.getName()
-				.replace(WebDriverTestCase.PACKAGE, "")
+				.replace(BaseTestCase.PACKAGE, "")
 				.replace('.', '/')
 				.replace('_', '-');
 		int lastTest = className.lastIndexOf("Test");

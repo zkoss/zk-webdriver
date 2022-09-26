@@ -18,7 +18,7 @@ package org.zkoss.test.webdriver.ztl;
 
 import org.openqa.selenium.By;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.BaseTestCase;
 
 /**
  * A simulator of DOM element object.
@@ -40,7 +40,7 @@ public class Element extends ClientWidget {
 	 * @param name any attribute of the element.
 	 */
 	public void set(String name, String value) {
-		WebDriverTestCase.eval(_out.toString() + "." + name + " = '" + value + "'");
+		BaseTestCase.eval(_out.toString() + "." + name + " = '" + value + "'");
 	}
 	/**
 	 * Sets the boolean value to the evaluated name.
@@ -50,7 +50,7 @@ public class Element extends ClientWidget {
 	 * @param value true or false.
 	 */
 	public void set(String name, boolean value) {
-		WebDriverTestCase.eval(_out.toString() + "." + name + " = " + value + "");
+		BaseTestCase.eval(_out.toString() + "." + name + " = " + value + "");
 	}
 	/**
 	 * Sets the number value to the evaluated name.
@@ -60,7 +60,7 @@ public class Element extends ClientWidget {
 	 * @param value any number.
 	 */
 	public void set(String name, int value) {
-		WebDriverTestCase.eval(_out.toString() + "." + name + " = " + value + "");
+		BaseTestCase.eval(_out.toString() + "." + name + " = " + value + "");
 	}
 	/**
 	 * Returns the result of the evaluated name.
@@ -70,7 +70,7 @@ public class Element extends ClientWidget {
 	 * @param name any attribute of the element.
 	 */
 	public String get(String name) {
-		return WebDriverTestCase.getEval(_out.toString() + "." + name);
+		return BaseTestCase.getEval(_out.toString() + "." + name);
 	}
 	/**
 	 * Returns the boolean value of the evaluated name.
@@ -81,7 +81,7 @@ public class Element extends ClientWidget {
 	 * @return if true, the return value is the same as "true".
 	 */
 	public boolean is(String name) {
-		return Boolean.valueOf(WebDriverTestCase.getEval(_out.toString() + "." + name));
+		return Boolean.valueOf(BaseTestCase.getEval(_out.toString() + "." + name));
 	}
 	/**
 	 * Returns the parentNode of the element.
@@ -106,7 +106,7 @@ public class Element extends ClientWidget {
 	 * Returns whether the element exists or not.
 	 */
 	public boolean exists() {
-		return Boolean.valueOf(WebDriverTestCase.getEval(_out.toString() + " != null"));
+		return Boolean.valueOf(BaseTestCase.getEval(_out.toString() + " != null"));
 	}
 	public Element toElement() {
 		return this;

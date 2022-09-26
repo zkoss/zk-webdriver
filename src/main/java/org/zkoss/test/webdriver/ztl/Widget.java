@@ -18,7 +18,7 @@ package org.zkoss.test.webdriver.ztl;
 
 import org.openqa.selenium.By;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.BaseTestCase;
 
 /**
  * A simulator of the ZK client widget.
@@ -62,7 +62,7 @@ public class Widget extends ClientWidget {
 	 * @param value true or false.
 	 */
 	public void set(String name, boolean value) {
-		WebDriverTestCase
+		BaseTestCase
 				.getEval("!!" + _out.toString() + toUpperCase(".set", name) + "(" + value + ")");
 	}
 	/**
@@ -73,7 +73,7 @@ public class Widget extends ClientWidget {
 	 * @param value any number.
 	 */
 	public void set(String name, int value) {
-		WebDriverTestCase.getEval("!!" +_out.toString() + toUpperCase(".set", name) + "(" + value + ")");
+		BaseTestCase.getEval("!!" +_out.toString() + toUpperCase(".set", name) + "(" + value + ")");
 	}
 	/**
 	 * Sets the string value to the evaluated name.
@@ -82,7 +82,7 @@ public class Widget extends ClientWidget {
 	 * @param name any allowed property of the widget.
 	 */
 	public void set(String name, String value) {
-		WebDriverTestCase.getEval("!!" +_out.toString() + toUpperCase(".set", name) + "('" + value + "')");
+		BaseTestCase.getEval("!!" +_out.toString() + toUpperCase(".set", name) + "('" + value + "')");
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class Widget extends ClientWidget {
 	 * @param name any allowed property of the widget.
 	 */
 	public String get(String name) {
-		return WebDriverTestCase.getEval(_out.toString() + toUpperCase(".get", name) + "()");
+		return BaseTestCase.getEval(_out.toString() + toUpperCase(".get", name) + "()");
 	}
 
 	/**
@@ -122,7 +122,8 @@ public class Widget extends ClientWidget {
 	 * @param name any allowed property of the widget.
 	 */
 	public boolean is(String name) {
-		return Boolean.valueOf(WebDriverTestCase.getEval(_out.toString() + toUpperCase(".is", name) + "()"));
+		return Boolean.valueOf(
+				BaseTestCase.getEval(_out.toString() + toUpperCase(".is", name) + "()"));
 	}
 	/**
 	 * Returns the child of the widget from the given name.
@@ -138,7 +139,7 @@ public class Widget extends ClientWidget {
 	 * Returns the size of the children.
 	 */
 	public int nChildren() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".nChildren"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".nChildren"));
 	}
 	/**
 	 * Returns the last child of the widget.
@@ -196,14 +197,15 @@ public class Widget extends ClientWidget {
 	 * Detaches the widget
 	 */
 	public void detach() {
-		WebDriverTestCase.eval(_out.toString() + ".detach()");
+		BaseTestCase.eval(_out.toString() + ".detach()");
 	}
 	
 	/**
 	 * Returns whether the widget exists or not.
 	 */
 	public boolean exists() {
-		return Boolean.valueOf(WebDriverTestCase.getEval("!!" + _out.toString() + " && !!" + _out.toString() + ".$n()"));
+		return Boolean.valueOf(
+				BaseTestCase.getEval("!!" + _out.toString() + " && !!" + _out.toString() + ".$n()"));
 	}
 	
 	public By toBy() {

@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.BaseTestCase;
 
 /**
  * A simulator of JQuery client side object, which wraps the JQuery client side
@@ -62,7 +62,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 *            CSS name.
 	 */
 	public String css(String name) {
-		return WebDriverTestCase.getEval(_out.toString() + ".css('" + name + "')");
+		return BaseTestCase.getEval(_out.toString() + ".css('" + name + "')");
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 *            attribute name of the element.
 	 */
 	public String attr(String name) {
-		return WebDriverTestCase.getEval(_out.toString() + ".attr('" + name + "')");
+		return BaseTestCase.getEval(_out.toString() + ".attr('" + name + "')");
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 *            the CSS class name.
 	 */
 	public boolean hasClass(String className) {
-		return Boolean.valueOf((WebDriverTestCase.getEval(_out.toString() + ".hasClass('" + className + "')")));
+		return Boolean.valueOf((BaseTestCase.getEval(_out.toString() + ".hasClass('" + className + "')")));
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public boolean is(String selector) {
-		return Boolean.valueOf((WebDriverTestCase.getEval(_out.toString() + ".is('" + selector + "')")));
+		return Boolean.valueOf((BaseTestCase.getEval(_out.toString() + ".is('" + selector + "')")));
 	}
 
 	/**
@@ -198,14 +198,14 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * Returns the text content
 	 */
 	public String text() {
-		return WebDriverTestCase.getEval(_out.toString() + ".text()");
+		return BaseTestCase.getEval(_out.toString() + ".text()");
 	}
 
 	/**
 	 * Returns the html content(innerHTML)
 	 */
 	public String html() {
-		return WebDriverTestCase.getEval(_out.toString() + ".html()");
+		return BaseTestCase.getEval(_out.toString() + ".html()");
 	}
 
 	/**
@@ -215,21 +215,21 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public String val() {
-		return WebDriverTestCase.getEval(_out.toString() + ".val()");
+		return BaseTestCase.getEval(_out.toString() + ".val()");
 	}
 
 	/**
 	 * Returns the current computed height for the first element.
 	 */
 	public int height() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".height()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".height()"));
 	}
 
 	/**
 	 * Returns the current computed width for the first element.
 	 */
 	public int width() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".width()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".width()"));
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * padding but not border.
 	 */
 	public int innerHeight() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".innerHeight()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".innerHeight()"));
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * padding but not border.
 	 */
 	public int innerWidth() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".innerWidth()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".innerWidth()"));
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * padding and border.
 	 */
 	public int outerWidth() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".outerWidth()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".outerWidth()"));
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @param includeMargin
 	 */
 	public int outerWidth(boolean includeMargin) {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(
+		return BaseTestCase.parseInt(BaseTestCase.getEval(
 				_out.toString() + ".outerWidth(" + includeMargin + ")"));
 	}
 
@@ -272,7 +272,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * padding and border.
 	 */
 	public int outerHeight() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".outerHeight()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".outerHeight()"));
 	}
 
 	/**
@@ -282,7 +282,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @param includeMargin
 	 */
 	public int outerHeight(boolean includeMargin) {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(
+		return BaseTestCase.parseInt(BaseTestCase.getEval(
 				_out.toString() + ".outerHeight(" + includeMargin + ")"));
 	}
 
@@ -290,7 +290,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * Returns the length of the array from the jQuery object.
 	 */
 	public int length() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".length"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".length"));
 	}
 
 	/**
@@ -312,28 +312,28 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * Returns the scrollbar width.
 	 */
 	public static int scrollbarWidth() {
-		return Integer.parseInt(WebDriverTestCase.getEval("jq.scrollbarWidth()"));
+		return Integer.parseInt(BaseTestCase.getEval("jq.scrollbarWidth()"));
 	}
 
 	/**
 	 * Returns whether the widget exists or not.
 	 */
 	public boolean exists() {
-		return Boolean.valueOf(WebDriverTestCase.getEval("!!" + _out.toString() + "[0]"));
+		return Boolean.valueOf(BaseTestCase.getEval("!!" + _out.toString() + "[0]"));
 	}
 
 	/**
 	 * Returns the current computed offsetLeft for the first element
 	 */
 	public int offsetLeft() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".offset().left"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".offset().left"));
 	}
 
 	/**
 	 * Returns the current computed offsetTop for the first element
 	 */
 	public int offsetTop() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".offset().top"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".offset().top"));
 	}
 
 	/**
@@ -343,7 +343,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public int positionLeft() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".position().left"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".position().left"));
 	}
 
 	/**
@@ -353,7 +353,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public int positionTop() {
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".position().top"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".position().top"));
 	}
 	/**
 	 * getter for scrollTop
@@ -361,7 +361,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public int scrollTop(){
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".scrollTop()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".scrollTop()"));
 	}
 	
 	/**
@@ -369,7 +369,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @param value
 	 */
 	public void scrollTop(int value){
-		WebDriverTestCase.eval(_out.toString() + ".scrollTop(\""+value+"\")");
+		BaseTestCase.eval(_out.toString() + ".scrollTop(\""+value+"\")");
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public int scrollLeft(){
-		return WebDriverTestCase.parseInt(WebDriverTestCase.getEval(_out.toString() + ".scrollLeft()"));
+		return BaseTestCase.parseInt(BaseTestCase.getEval(_out.toString() + ".scrollLeft()"));
 	}
 	
 	/**
@@ -386,7 +386,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @param value
 	 */
 	public void scrollLeft(int value){
-		WebDriverTestCase.eval(_out.toString() + ".scrollLeft(\""+value+"\")");
+		BaseTestCase.eval(_out.toString() + ".scrollLeft(\""+value+"\")");
 	}
 	
 	/**
@@ -395,7 +395,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public int scrollHeight(){
-		return WebDriverTestCase.parseInt(get(0).get("scrollHeight"));
+		return BaseTestCase.parseInt(get(0).get("scrollHeight"));
 	}
 	
 	/**
@@ -404,7 +404,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 * @return
 	 */
 	public int scrollWidth(){
-		return WebDriverTestCase.parseInt(get(0).get("scrollWidth"));
+		return BaseTestCase.parseInt(get(0).get("scrollWidth"));
 	}
 	
 	/**
@@ -430,7 +430,7 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	}
 
 	public void remove() {
-		WebDriverTestCase.eval(_out.toString() + ".remove()");
+		BaseTestCase.eval(_out.toString() + ".remove()");
 	}
 	@Override
 	public Iterator<JQuery> iterator() {

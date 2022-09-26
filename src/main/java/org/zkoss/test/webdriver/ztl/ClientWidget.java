@@ -24,7 +24,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.BaseTestCase;
 
 /**
  * The skeleton of ZK client side widget. It is used to manipulate a string buffer
@@ -72,7 +72,7 @@ public abstract class ClientWidget extends By {
 	 * @param withDot if true, the dot '.' is added before the script.
 	 */
 	public String eval(String script, boolean withDot) {
-		return WebDriverTestCase.getEval(_out.toString() + (withDot ? "." : "") + script);
+		return BaseTestCase.getEval(_out.toString() + (withDot ? "." : "") + script);
 	}
 	/**
 	 * Returns the evaluation string that is JavaScript format. 
@@ -101,7 +101,7 @@ public abstract class ClientWidget extends By {
 	public List<WebElement> findElements(SearchContext context) {
 		List<WebElement> list = new ArrayList<WebElement>();
 		if (context instanceof WebDriver)
-			list.add(WebDriverTestCase.toElement(this));
+			list.add(BaseTestCase.toElement(this));
 		return list;
 	}
 }
