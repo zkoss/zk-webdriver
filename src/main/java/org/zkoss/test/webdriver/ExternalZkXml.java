@@ -11,9 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.test.webdriver;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 
 import org.zkoss.lang.Library;
 
@@ -23,7 +25,7 @@ import org.zkoss.lang.Library;
  * @author rudyhuang
  * @author jumperchen
  */
-public class ExternalZkXml implements BeforeAllCallback, AfterAllCallback { // extends ExternalResource
+public class ExternalZkXml implements TestInstancePostProcessor, BeforeAllCallback, AfterAllCallback { // extends ExternalResource
 	private final String configPath;
 
 	/**
@@ -68,6 +70,11 @@ public class ExternalZkXml implements BeforeAllCallback, AfterAllCallback { // e
 
 	// Junit 5
 	public void beforeAll(ExtensionContext context) throws Exception {
+		before();
+	}
+
+	public void postProcessTestInstance(Object testInstance,
+			ExtensionContext context) throws Exception {
 		before();
 	}
 }

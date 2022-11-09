@@ -11,6 +11,7 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.test.webdriver;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -19,6 +20,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
  * @author jumperchen
  * @since 1.0.4
  */
-@ExtendWith(SingletonServer.class)
 public abstract class SingletonWebDriverTestCase extends BaseTestCase {
+	@RegisterExtension
+	@Order(Integer.MAX_VALUE)
+	static protected SingletonServer prototypeServer = new SingletonServer();
 }

@@ -11,6 +11,7 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.test.webdriver;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -20,6 +21,9 @@ import org.junit.jupiter.api.extension.RegisterExtension;
  * @author jumperchen
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(PrototypeServer.class)
 public abstract class WebDriverTestCase extends BaseTestCase {
+
+	@RegisterExtension
+	@Order(Integer.MAX_VALUE)
+	static protected PrototypeServer prototypeServer = new PrototypeServer();
 }
