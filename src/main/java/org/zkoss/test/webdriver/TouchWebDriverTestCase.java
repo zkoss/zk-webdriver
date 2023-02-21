@@ -39,8 +39,8 @@ public abstract class TouchWebDriverTestCase extends DockerWebDriverTestCase {
 				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
 	}
 
-	private final static PointerInput FINGER = new PointerInput(
-			PointerInput.Kind.TOUCH, "finger");
+	protected PointerInput FINGER = new PointerInput(
+			PointerInput.Kind.MOUSE, "finger");
 
 	public void swipe(Point start, Point end) {
 		swipe(start, end, 0);
