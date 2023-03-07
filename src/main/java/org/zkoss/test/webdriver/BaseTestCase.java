@@ -621,7 +621,6 @@ public abstract class BaseTestCase {
 		focus(locator);
 		WebElement webElement = toElement(locator);
 		webElement.sendKeys(Keys.chord(isMac() ? Keys.META : Keys.CONTROL, "a"), text);
-		webElement.sendKeys(text);
 		blur(locator);
 	}
 
