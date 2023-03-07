@@ -620,7 +620,7 @@ public abstract class BaseTestCase {
 	protected void type(ClientWidget locator, String text) {
 		focus(locator);
 		WebElement webElement = toElement(locator);
-		webElement.clear();
+		webElement.sendKeys(Keys.chord(isMac() ? Keys.META : Keys.CONTROL, "a"), text);
 		webElement.sendKeys(text);
 		blur(locator);
 	}
