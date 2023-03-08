@@ -229,7 +229,7 @@ public abstract class BaseTestCase {
 	 */
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions options = new ChromeOptions();
-		options.addArguments("window-size=1920,1080");
+		options.addArguments("window-size=1920,1080", "--remote-allow-origins=*");
 		return options;
 	}
 
