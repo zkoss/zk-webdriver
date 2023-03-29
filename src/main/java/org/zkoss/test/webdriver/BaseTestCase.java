@@ -51,6 +51,7 @@ import org.openqa.selenium.logging.LogType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.test.webdriver.ztl.ClientWidget;
 import org.zkoss.test.webdriver.ztl.Element;
 import org.zkoss.test.webdriver.ztl.JQuery;
@@ -620,7 +621,14 @@ public abstract class BaseTestCase {
 	protected void type(ClientWidget locator, String text) {
 		focus(locator);
 		WebElement webElement = toElement(locator);
-		webElement.sendKeys(Keys.chord(isMac() ? Keys.META : Keys.CONTROL, "a"), text);
+		webElement.sendKeys(Keys.chord(isMac() ? Keys.META : Keys.CONTROL, "a"));
+
+		// Fix "" text cannot be inserted, we use "BACK_SPACE" instead.
+		if (Strings.isEmpty(text)) {
+			webElement.sendKeys(Keys.BACK_SPACE);
+		} else {
+			webElement.sendKeys(text);
+		}
 		blur(locator);
 	}
 
