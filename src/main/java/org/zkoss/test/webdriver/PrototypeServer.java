@@ -18,7 +18,6 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.junit.jupiter.api.extension.TestInstancePreDestroyCallback;
@@ -40,6 +39,11 @@ public class PrototypeServer implements TestInstancePostProcessor, TestInstanceP
 				new InetSocketAddress(BaseTestCase.getHost(), Integer.parseInt(BaseTestCase.getServerPort())));
 
 		final WebAppContext context = new WebAppContext();
+
+		String webxmlPath = System.getProperty(ExternalWebXml.WEB_XML_KEY);
+		if (webxmlPath != null) {
+			context.setOverrideDescriptor(Resource.newResource(BaseTestCase.getBaseResource() + webxmlPath).getFile().getAbsolutePath());
+		}
 		context.setContextPath(BaseTestCase.getContextPath());
 		context.setBaseResource(Resource.newResource(BaseTestCase.getBaseResource()));
 		context.getSessionHandler().setSessionIdPathParameterName(null);
