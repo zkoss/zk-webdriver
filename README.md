@@ -38,6 +38,14 @@ test {
 }
 ```
 
+### How to use Docker compose v1 in System Property
+For example in Gradle,
+```gradle
+test {
+    systemProperty "useDockerComposeV2", "false"
+}
+```
+**Note:** By default, it's Docker compose v2 since 1.0.10.2. 
 ### How to release
 1. Update the project `version` in `gradle.properties`
 2. Run `./gradlew clean build bundleJar`
