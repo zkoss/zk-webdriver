@@ -54,6 +54,14 @@ test {
 }
 ```
 
+### How to specify Host in System Property
+For example in Gradle,
+```gradle
+test {
+    systemProperty "Host", "127.0.0.1"
+}
+```
+
 **Note:** By default, it's Docker compose v2 since 1.0.10.2. 
 ### How to release
 1. Update the project `version` in `gradle.properties`
