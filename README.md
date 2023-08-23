@@ -45,6 +45,15 @@ test {
     systemProperty "useDockerComposeV2", "false"
 }
 ```
+
+### How to specify Remote Web Driver Url in System Property
+For example in Gradle,
+```gradle
+test {
+    systemProperty "RemoteWebDriverUrl", "http://sechrome.test:4444/wd/hub"
+}
+```
+
 **Note:** By default, it's Docker compose v2 since 1.0.10.2. 
 ### How to release
 1. Update the project `version` in `gradle.properties`

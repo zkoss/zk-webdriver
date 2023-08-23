@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -73,6 +72,7 @@ public abstract class BaseTestCase {
 	private static final boolean IS_JENKINS = System.getenv("JENKINS_HOME") != null;
 	private static final String HOST;
 	private final static int OS_TYPE;
+	private static final String REMOTE_WEB_DRIVER_URL = System.getProperty("RemoteWebDriverUrl", "");
 
 	private final static String OS = System.getProperty("os.name").toLowerCase();
 
@@ -201,7 +201,7 @@ public abstract class BaseTestCase {
 	}
 
 	protected String getRemoteWebDriverUrl() {
-		return "http://sechrome.test:4444/wd/hub";
+		return REMOTE_WEB_DRIVER_URL;
 	}
 
 	protected boolean isUseDocker() {
@@ -210,14 +210,6 @@ public abstract class BaseTestCase {
 
 	@SuppressWarnings("unchecked")
 	protected boolean isUsingRemoteWebDriver(ChromeOptions driverOptions) {
-		// There are 2 situations needed to be run on remote
-		// 1. lang
-		// 2. mobileEmulation (TouchActions)
-		if (IS_JENKINS) {
-			Map<String, Object> caps = (Map<String, Object>) driverOptions.asMap().get(ChromeOptions.CAPABILITY);
-			List<String> args = (List<String>) caps.get("args");
-			return args.stream().anyMatch(arg -> arg.contains("lang=")) || caps.containsKey("mobileEmulation");
-		}
 		return isUseDocker();
 	}
 
