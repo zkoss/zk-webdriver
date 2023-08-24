@@ -67,7 +67,7 @@ public abstract class TouchWebDriverTestCase extends DockerWebDriverTestCase {
 
 	public void tap(Point point, int duration) {
 		Sequence tap = new Sequence(FINGER, 1)
-				.addAction(FINGER.createPointerMove(ofMillis(0), viewport(), point.getX(), point.getY()))
+				.addAction(FINGER.createPointerMove(ofMillis(0), viewport(), point.getX() + 1, point.getY() + 1))
 				.addAction(FINGER.createPointerDown(LEFT.asArg()))
 				.addAction(new Pause(FINGER, ofMillis(duration)))
 				.addAction(FINGER.createPointerUp(LEFT.asArg()));
