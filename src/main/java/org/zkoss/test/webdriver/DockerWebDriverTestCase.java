@@ -13,13 +13,18 @@ package org.zkoss.test.webdriver;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 
 import com.palantir.docker.compose.DockerComposeExtension;
 import com.palantir.docker.compose.connection.waiting.HealthChecks;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
@@ -41,26 +46,61 @@ public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 		return "http://localhost:" + externalPort + "/wd/hub";
 	}
 
+	protected FileLock globalLock;
+
+	private static final String tempDir = new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+
 	// create a temp file for docker compose.yml
-	private static String exportResource(String file) {
+	private String exportResource(String file) {
 		InputStream resourceAsStream = ClassLoader.getSystemResourceAsStream(
 				"docker/docker-compose.yml");
 		try {
-			String dest = Files.createTempDirectory("zkWebdriver")
-					.resolve(file).toFile().getAbsolutePath();
-			Path path = Paths.get(dest);
+			Path path = Paths.get(System.getProperty("java.io.tmpdir"), tempDir, "zkWebdriver").resolve(file);
 			if (!Files.isDirectory(path.getParent())) {
 				Files.createDirectories(path.getParent());
 			}
-			Files.copy(resourceAsStream, path, StandardCopyOption.REPLACE_EXISTING);
-			return dest;
+			if (!path.toFile().exists()) {
+				Files.copy(resourceAsStream, path, StandardCopyOption.REPLACE_EXISTING);
+			}
+
+			// try to acquire a global lock for each DockerWebDriver
+			RandomAccessFile files = new RandomAccessFile(path.toFile(), "rw");
+			FileChannel channel = files.getChannel();
+			while (true) {
+				try {
+					globalLock = channel.tryLock();
+					if (globalLock.isValid()) {
+						break;
+					}
+				} catch (Throwable e) {
+					// File is already locked in this thread or virtual machine
+				}
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+			}
+			return path.toAbsolutePath().toString();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@AfterAll
+	public void unlockGlobalLock() {
+		if (globalLock != null) {
+			try {
+				globalLock.release();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
 	// remove the docker env. if the bug has fixed - https://tracker.zkoss.org/browse/ZK-5092
 	@RegisterExtension
-	public final static DockerComposeExtension docker = DockerComposeExtension.builder()
+	public final DockerComposeExtension docker = DockerComposeExtension.builder()
 			.file(exportResource("docker/docker-compose.yml"))
 			.useDockerComposeV2(Boolean.parseBoolean(System.getProperty("useDockerComposeV2", "true")))
 			.waitingForService("hub", HealthChecks.toRespondOverHttp(4444,
