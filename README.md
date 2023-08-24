@@ -62,6 +62,16 @@ test {
 }
 ```
 
+### How to specify MobileEmulationDeviceName in System Property
+For example in Gradle,
+```gradle
+test {
+    systemProperty "MobileEmulationDeviceName", "iPad"
+}
+```
+**Note:** The device name is `Nexus 7` by default, because `iPad` doesn't work since ChromeDriver 115+
+
+
 **Note:** By default, it's Docker compose v2 since 1.0.10.2. 
 ### How to release
 1. Update the project `version` in `gradle.properties`

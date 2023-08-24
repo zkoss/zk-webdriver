@@ -21,12 +21,14 @@ import java.nio.file.StandardCopyOption;
 import com.palantir.docker.compose.DockerComposeExtension;
 import com.palantir.docker.compose.connection.waiting.HealthChecks;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.parallel.ResourceLock;
 
 /**
  * A local Docker container to support a linux based remote WebDriver for
  * Chrome. (Optional Edge and Firefox)
  * @author jumperchen
  */
+@ResourceLock("dockerResource")
 public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 
 	// enable to use docker env.
