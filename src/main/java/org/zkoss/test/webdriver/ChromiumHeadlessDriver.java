@@ -61,7 +61,9 @@ public class ChromiumHeadlessDriver extends ChromeDriver {
 	}
 
 	private static ChromeOptions headlessSettings(ChromeOptions options, boolean headless) {
-		options.addArguments("--headless=new");
+		if (headless) {
+			options.addArguments("--headless=new");
+		}
 		return options;
 	}
 }
