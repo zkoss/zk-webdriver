@@ -1,9 +1,9 @@
 /* DockerWebDriverTestCase.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		1:29 PM 2021/12/30, Created by jumperchen
 
@@ -59,9 +59,12 @@ public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 			if (!Files.isDirectory(path.getParent())) {
 				Files.createDirectories(path.getParent());
 			}
-			if (!path.toFile().exists()) {
-				Files.copy(resourceAsStream, path, StandardCopyOption.REPLACE_EXISTING);
+			if (path.toFile().exists()) {
+				path.toFile().delete();
 			}
+
+			// always copy the docker-compose.yml to the temp file
+			Files.copy(resourceAsStream, path, StandardCopyOption.REPLACE_EXISTING);
 
 			// try to acquire a global lock for each DockerWebDriver
 			RandomAccessFile files = new RandomAccessFile(path.toFile(), "rw");
