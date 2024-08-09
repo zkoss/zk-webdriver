@@ -15,10 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -90,45 +88,22 @@ public abstract class BaseTestCase {
 			OS_TYPE = -1;
 		}
 	}
-	public static String getIPAddress() {
-		String command = "ipconfig getifaddr en0";
-		StringBuilder output = new StringBuilder();
 
-		try {
-			ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-			Process process = processBuilder.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				output.append(line);
-			}
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return output.toString();
-	}
 	static {
 		String host = System.getProperty("Host", "127.0.0.1");
 		// lookup IP for support Docker Chrome instance
-		if (isMac()) {
-			// mac will get wrong IP, so we use command to retrieve the correct one.
-			host = getIPAddress();
-		} else {
+		try {
+			Socket socket = new Socket();
+			socket.connect(new InetSocketAddress("google.com", 80));
+			host = socket.getLocalAddress().getHostAddress();
+		} catch (IOException e) {
 			try {
-				Socket socket = new Socket();
-				socket.connect(new InetSocketAddress("google.com", 80));
-				host = socket.getLocalAddress().getHostAddress();
-			} catch (IOException e) {
-				try {
-					InetAddress candidateAddress = getLocalHostLANAddress();
-					host = candidateAddress.getHostAddress();
-				} catch (UnknownHostException ex) {
-					ex.printStackTrace();
-				}
-
+				InetAddress candidateAddress = getLocalHostLANAddress();
+				host = candidateAddress.getHostAddress();
+			} catch (UnknownHostException ex) {
+				ex.printStackTrace();
 			}
+
 		}
 		HOST = host;
 	}
