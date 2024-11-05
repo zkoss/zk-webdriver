@@ -265,7 +265,7 @@ public abstract class BaseTestCase {
 			}
 			webDriver.get(loc);
 		}
-
+		waitForAjaxResponse(2, getTimeout(), System.currentTimeMillis(), "!window.zk || window.zk.loading");
 		return webDriver;
 	}
 
@@ -347,25 +347,36 @@ public abstract class BaseTestCase {
 	 *
 	 */
 	protected void waitResponse(int timeout, boolean includingAnimation) {
-		long s = System.currentTimeMillis();
-		int i = 0;
+		sleep(getSpeed() / 2); // take a break first.
+		String defaultScript = "!!zAu.processing() || (window.mobx && window.mobx._getGlobalState() && window.mobx._getGlobalState().isRunningReactions)";
+		waitForAjaxResponse(getRetryCount(includingAnimation), timeout, System.currentTimeMillis(),
+				includingAnimation
+						? defaultScript + " || !!jq.timers.length"
+						: defaultScript);
+	}
+
+	/**
+	 * Returns the retry count for waiting for Ajax response.
+	 * Default: 3 and if including animation, 5.
+	 */
+	protected int getRetryCount(boolean includingAnimation) {
+		return includingAnimation ? 5 : 3;
+	}
+
+	private void waitForAjaxResponse(int loopCount, int timeout, long startTime, String waitForScript) {
 		int ms = getSpeed();
-
-		String scripts = includingAnimation ? "!!zAu.processing() || !!jq.timers.length" : "!!zAu.processing()";
-
-		sleep(ms / 2); // take a break first.
-
-		while (i < 2) { // make sure the command is triggered.
-			while (Boolean.valueOf(this.getEval(scripts))) {
-				if (System.currentTimeMillis() - s > timeout) {
-					assertTrue(false, "Test case timeout!");
+		int i = 0;
+		while (i < loopCount) { // make sure the command is triggered.
+			while (Boolean.parseBoolean(getEval(waitForScript))) {
+				if (System.currentTimeMillis() - startTime > timeout) {
+					fail("Test case timeout!");
 					break;
 				}
-				i = 0;//reset
+				i = 0; // reset
 				sleep(ms);
 			}
 			i++;
-			sleep(includingAnimation ? ms * 2 : ms);
+			sleep(ms);
 		}
 	}
 
