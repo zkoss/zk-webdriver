@@ -3,7 +3,7 @@
 # To stop the execution, hit Ctrl+C, and then `docker-compose -f docker-compose-v3.yml down`
 services:
   chrome:
-    image: selenium/node-chrome:4.23.0-20240727
+    image: selenium/node-chrome:latest
     shm_size: 2gb
     depends_on:
       - hub
@@ -33,7 +33,7 @@ services:
 #      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 
   hub:
-    image: selenium/hub:4.23.0-20240727
+    image: selenium/hub:latest
     container_name: hub
     ports:
       - "4442:4442"
