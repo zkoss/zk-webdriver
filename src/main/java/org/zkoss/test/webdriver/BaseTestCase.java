@@ -75,6 +75,7 @@ public abstract class BaseTestCase {
 
 	private final static String OS = System.getProperty("os.name").toLowerCase();
 
+	private boolean connectWaiting = true;
 	static {
 		if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix")) {
 			OS_TYPE = 1;
@@ -265,8 +266,28 @@ public abstract class BaseTestCase {
 			}
 			webDriver.get(loc);
 		}
-		waitForAjaxResponse(2, getTimeout(), System.currentTimeMillis(), "!window.zk || window.zk.loading");
+		if (connectWaiting) {
+			waitForAjaxResponse(2, getTimeout(), System.currentTimeMillis(),
+					"!window.zk || window.zk.loading");
+		}
 		return webDriver;
+	}
+
+	/**
+	 * Disables the connection waiting.
+	 * <p>By default, it will wait for the connection to be established. In some cases,
+	 * you may want to disable it, such as alert text at connect phase.</p>
+	 */
+	protected void disableConnectionWait() {
+		connectWaiting = false;
+	}
+
+	/**
+	 * Enables the connection waiting.
+	 * @see #disableConnectionWait()
+	 */
+	protected void enableConnectionWait() {
+		connectWaiting = true;
 	}
 
 	protected WebDriver initWebDriver() {
