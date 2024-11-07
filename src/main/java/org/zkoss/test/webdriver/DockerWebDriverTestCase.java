@@ -23,6 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 
 import com.palantir.docker.compose.DockerComposeExtension;
+import com.palantir.docker.compose.configuration.ShutdownStrategy;
 import com.palantir.docker.compose.connection.waiting.HealthChecks;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -109,5 +110,6 @@ public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 			.waitingForService("hub", HealthChecks.toRespondOverHttp(4444,
 					(port) -> port.inFormat("http://$HOST:$EXTERNAL_PORT/ui/index.html")))
 			.waitingForService("chrome", HealthChecks.toHaveAllPortsOpen())
+			.shutdownStrategy(ShutdownStrategy.KILL_DOWN)
 			.build();
 }
