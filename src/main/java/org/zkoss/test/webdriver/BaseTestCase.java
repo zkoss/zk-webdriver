@@ -12,7 +12,6 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 package org.zkoss.test.webdriver;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
@@ -42,11 +41,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -266,10 +267,25 @@ public abstract class BaseTestCase {
 			}
 			webDriver.get(loc);
 		}
+
+		// manual to disable waiting connection.
 		if (connectWaiting) {
-			waitForAjaxResponse(2, getTimeout(), System.currentTimeMillis(),
-					"!window.zk || window.zk.loading");
+			// add a check for zk.wpd script loading automatically.
+			if (ExpectedConditions.alertIsPresent().apply(webDriver) == null) {
+				try {
+					if (((JavascriptExecutor) this.driver).executeScript(
+							"return Array.from(document.scripts).some(script => script.src.includes('zk.wpd'));")
+							== Boolean.TRUE) {
+						waitForAjaxResponse(2, getTimeout(),
+								System.currentTimeMillis(),
+								"!window.zk || window.zk.loading");
+					}
+				} catch (UnhandledAlertException e) {
+					// ignore to outside to handle.
+				}
+			}
 		}
+
 		return webDriver;
 	}
 
