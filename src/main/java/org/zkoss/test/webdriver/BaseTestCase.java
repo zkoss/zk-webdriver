@@ -45,6 +45,7 @@ import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -187,7 +188,7 @@ public abstract class BaseTestCase {
 		if (driver == null) {
 			ChromeOptions driverOptions = getWebDriverOptions();
 			driver = isUsingRemoteWebDriver(driverOptions)
-					? new DockerChromeRemoteWebDriver(getRemoteWebDriverUrl(), driverOptions)
+					? new DockerRemoteWebDriver(getRemoteWebDriverUrl(), driverOptions)
 					: new ChromiumHeadlessDriver(driverOptions, isHeadless());
 		}
 		return driver;
@@ -203,6 +204,9 @@ public abstract class BaseTestCase {
 
 	@SuppressWarnings("unchecked")
 	protected boolean isUsingRemoteWebDriver(ChromeOptions driverOptions) {
+		return isUseDocker();
+	}
+	protected boolean isUsingRemoteWebDriver(FirefoxOptions driverOptions) {
 		return isUseDocker();
 	}
 

@@ -1,13 +1,13 @@
-/* DockerWebDriverTestCase.java
+/* DockerFirefoxDriverTestCase.java
 
 	Purpose:
 
 	Description:
 
 	History:
-		1:29 PM 2021/12/30, Created by jumperchen
+		10:45 AM 2024/11/29, Created by jumperchen
 
-Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.test.webdriver;
 
@@ -30,20 +30,19 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
 /**
- * A local Docker container to support a linux based remote WebDriver for
- * Chrome. (Optional Edge and Firefox)
+ * A test case with a Firefox WebDriver running in a Docker container.
  * @author jumperchen
  */
 @ResourceLock("dockerResource")
-public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
-
+public abstract class DockerFirefoxDriverTestCase extends FirefoxWebDriverTestCase {
 	// enable to use docker env.
 	protected final boolean isUseDocker() {
 		return true;
 	}
 
+
 	protected String getRemoteWebDriverUrl() {
-		final int externalPort = docker.containers().container("hub").port(4444).getExternalPort();
+		final int externalPort = firefoxDocker.containers().container("hub").port(4444).getExternalPort();
 		return "http://localhost:" + externalPort + "/wd/hub";
 	}
 
@@ -102,14 +101,13 @@ public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 		}
 	}
 
-	// remove the docker env. if the bug has fixed - https://tracker.zkoss.org/browse/ZK-5092
 	@RegisterExtension
-	public final DockerComposeExtension docker = DockerComposeExtension.builder()
+	public final DockerComposeExtension firefoxDocker = DockerComposeExtension.builder()
 			.file(exportResource("docker/docker-compose.yml"))
 			.useDockerComposeV2(Boolean.parseBoolean(System.getProperty("useDockerComposeV2", "true")))
 			.waitingForService("hub", HealthChecks.toRespondOverHttp(4444,
 					(port) -> port.inFormat("http://$HOST:$EXTERNAL_PORT/ui/index.html")))
-			.waitingForService("chrome", HealthChecks.toHaveAllPortsOpen())
+			.waitingForService("firefox", HealthChecks.toHaveAllPortsOpen())
 			.shutdownStrategy(ShutdownStrategy.KILL_DOWN)
 			.build();
 }
