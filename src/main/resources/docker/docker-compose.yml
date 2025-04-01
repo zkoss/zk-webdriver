@@ -34,7 +34,7 @@ services:
 
   hub:
     image: selenium/hub:latest
-    container_name: hub
+    container_name: ${CONTAINER_NAME}
     ports:
       - "4442:4442"
       - "4443:4443"
