@@ -4,6 +4,7 @@
 services:
   chrome:
     image: selenium/node-chrome:latest
+    platform: linux/amd64 # this force x86 emulation on ARM
     shm_size: 2gb
     depends_on:
       - hub
@@ -24,6 +25,7 @@ services:
 
   firefox:
     image: selenium/node-firefox:latest
+    platform: linux/amd64 # this force x86 emulation on ARM
     shm_size: 2gb
     depends_on:
       - hub
