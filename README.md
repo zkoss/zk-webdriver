@@ -66,10 +66,11 @@ test {
 For example in Gradle,
 ```gradle
 test {
-    systemProperty "MobileEmulationDeviceName", "iPad"
+    systemProperty "MobileEmulationDeviceName", "iPad Mini"
 }
 ```
-**Note:** The device name is `Nexus 7` by default, because `iPad` doesn't work since ChromeDriver 115+
+**Note:** The device name is `Pixel 9` by default. `iPad` stopped working in ChromeDriver 115+, and
+Chrome 153 removed `Nexus 7`.
 
 
 **Note:** By default, it's Docker compose v2 since 1.0.10.2. 

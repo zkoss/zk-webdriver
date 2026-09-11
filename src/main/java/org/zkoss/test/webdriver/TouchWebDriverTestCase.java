@@ -37,7 +37,8 @@ public abstract class TouchWebDriverTestCase extends DockerWebDriverTestCase {
 	protected final ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
 				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName",
-						System.getProperty("MobileEmulationDeviceName", "Nexus 7"))); // iPad not working for ChromeDriver 115+
+						System.getProperty("MobileEmulationDeviceName", "Pixel 9")));
+						// iPad not working for ChromeDriver 115+; ; Nexus 7 removed in Chrome 153
 	}
 
 	protected PointerInput FINGER = new PointerInput(
