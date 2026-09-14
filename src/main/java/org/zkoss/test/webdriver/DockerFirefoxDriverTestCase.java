@@ -105,6 +105,7 @@ public abstract class DockerFirefoxDriverTestCase extends FirefoxWebDriverTestCa
 	public final DockerComposeExtension firefoxDocker = DockerComposeExtension.builder()
 			.file(exportResource("docker/docker-compose.yml"))
 			.useDockerComposeV2(Boolean.parseBoolean(System.getProperty("useDockerComposeV2", "true")))
+			.pullOnStartup(true)
 			.waitingForService("hub", HealthChecks.toRespondOverHttp(4444,
 					(port) -> port.inFormat("http://$HOST:$EXTERNAL_PORT/ui/index.html")))
 			.waitingForService("firefox", HealthChecks.toHaveAllPortsOpen())

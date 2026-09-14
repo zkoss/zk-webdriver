@@ -107,6 +107,7 @@ public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 	public final DockerComposeExtension docker = DockerComposeExtension.builder()
 			.file(exportResource("docker/docker-compose.yml"))
 			.useDockerComposeV2(Boolean.parseBoolean(System.getProperty("useDockerComposeV2", "true")))
+			.pullOnStartup(true)
 			.waitingForService("hub", HealthChecks.toRespondOverHttp(4444,
 					(port) -> port.inFormat("http://$HOST:$EXTERNAL_PORT/ui/index.html")))
 			.waitingForService("chrome", HealthChecks.toHaveAllPortsOpen())
